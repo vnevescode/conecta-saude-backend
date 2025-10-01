@@ -1,28 +1,116 @@
-Backend - Conecta+Saúde
-Sobre o Projeto
-Este repositório contém o serviço principal do backend do projeto Conecta+Saúde. Ele atua como o cérebro da aplicação, orquestrando o fluxo de análise de pacientes.
+# 🏥 Conecta+Saúde API - MVP
 
-Desenvolvido em Node.js com o framework NestJS, este serviço é responsável por:
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.108+-green.svg)](https://fastapi.tiangolo.com)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://docker.com)
 
-Receber requisições da interface do usuário (frontend).
+API Backend minimalista para análise de pacientes com IA, desenvolvida com **FastAPI** seguindo princípios **Clean Code**, **DRY**, **KISS** e **YAGNI**.
 
-Comunicar-se com o microsserviço de Machine Learning (model-LLM) para classificar pacientes como outliers.
+> 🎯 **MVP Otimizado**: Código limpo, essencial e direto ao ponto.
 
-Chamar a API do Google Gemini para gerar recomendações de saúde com base nos dados dos pacientes.
+## 🚀 Como Executar
 
-Expor o endpoint POST /patient/analyze para o consumo do frontend.
+### 1. Instalar Dependências
+```bash
+cd conecta-saude-fastapi
+pip install -r requirements.txt
+```
 
-🛠️ Tecnologias Utilizadas
-Node.js: Ambiente de execução JavaScript.
+### 2. Configurar Variáveis de Ambiente
+```bash
+# Copiar arquivo de exemplo
+cp .env.example .env
 
-NestJS: Framework progressivo para aplicações Node.js eficientes e escaláveis.
+# Editar com suas chaves
+# GEMINI_API_KEY=sua_chave_do_google_gemini
+# CLASSIFICATION_SERVICE_URL=http://localhost:8082
+```
 
-TypeScript: Superset do JavaScript que adiciona tipagem estática.
+### 3. Executar o Servidor
+```bash
+# Opção 1: Usando uvicorn diretamente
+uvicorn main:app --reload --host 0.0.0.0 --port 8082
 
-Docker: Para containerização da aplicação.
+# Opção 2: Usando o script main.py
+python main.py
+```
 
-🚀 Como Executar
-Este serviço é projetado para ser executado em conjunto com o model-LLM através do Docker Compose na raiz do projeto. Para instruções detalhadas de como rodar o ambiente completo, consulte o arquivo BUILD.md.
+### 4. Testar
+- **Documentação**: http://localhost:8082/docs
+- **Health Check**: http://localhost:8082/health
+- **Endpoint de Teste**: http://localhost:8082/patient/test
 
-🤝 Contribuição
-Contribuições são muito bem-vindas! Por favor, leia nosso GUIA DE CONTRIBUIÇÃO para saber como participar.
+## 🧪 Testando o Endpoint Principal
+
+### Teste Simples (GET)
+```bash
+curl http://localhost:8082/patient/test
+```
+
+### Análise de Paciente (POST)
+```bash
+curl -X POST "http://localhost:8082/patient/analyze" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "idade": 65,
+       "nivel_glicose": 280,
+       "pressao_sistolica": 160,
+       "pressao_diastolica": 95,
+       "historico_familiar": true
+     }'
+```
+
+## 📁 Estrutura do Projeto
+
+```
+conecta-saude-fastapi/
+├── main.py                     # Ponto de entrada
+├── requirements.txt            # Dependências
+├── .env.example               # Exemplo de configuração
+└── app/
+    ├── core/
+    │   └── config.py          # Configurações
+    ├── models/
+    │   └── patient.py         # Modelos Pydantic
+    ├── services/
+    │   ├── classification_service.py  # Classificação ML
+    │   ├── llm_service.py            # Google Gemini
+    │   └── patient_service.py        # Lógica principal
+    └── routers/
+        ├── health_router.py   # Health checks
+        └── patient_router.py  # Endpoints de paciente
+```
+
+## 🔄 Equivalências NestJS → FastAPI
+
+| NestJS | FastAPI | Descrição |
+|--------|---------|----------|
+| `@Controller('patient')` | `router = APIRouter(prefix="/patient")` | Definição de rotas |
+| `@Post('analyze')` | `@router.post("/analyze")` | Endpoint POST |
+| `@Injectable()` | `def get_service()` | Injeção de dependência |
+| `PatientService` | `PatientService` | Lógica de negócio |
+| `ClassificationService` | `ClassificationService` | Serviço ML |
+| `LlmService` | `LLMService` | Serviço LLM |
+
+## 🛠️ Funcionalidades
+
+- ✅ **Análise de Pacientes**: Detecta outliers
+- ✅ **Integração LLM**: Google Gemini para recomendações
+- ✅ **Classificação ML**: Mock interno + integração externa
+- ✅ **Validação**: Pydantic para validação de dados
+- ✅ **Documentação**: Swagger UI automática
+- ✅ **Health Checks**: Monitoramento de saúde da API
+- ✅ **CORS**: Configurado para frontend
+
+## 🔧 Desenvolvimento
+
+```bash
+# Modo desenvolvimento com auto-reload
+uvicorn main:app --reload
+
+# Instalar dependências de desenvolvimento
+pip install pytest httpx
+
+# Executar testes (quando implementados)
+pytest
+```
