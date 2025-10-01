@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "conecta-saude-api"
+version = "1.0.0"
+description = "API Backend para análise de pacientes com IA"
+authors = [{name = "Conecta+Saúde Team", email = "conectasaude@recife.pe.gov.br"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+
+dependencies = [
+    "fastapi>=0.108.0",
+    "uvicorn>=0.25.0",
+    "pydantic>=2.5.3",
+    "pydantic-settings>=2.1.0",
+    "httpx>=0.26.0",
+    "python-dotenv>=1.0.0",
+    "google-generativeai>=0.3.2",
+    "python-multipart>=0.0.6",
+    "psutil>=5.9.7",
+    "gunicorn>=21.2.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.3",
+    "pytest-asyncio>=0.23.2",
+    "requests>=2.31.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/conectasaude/api"
+Repository = "https://github.com/conectasaude/api"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+    "--cov=app",
+    "--cov-report=term-missing",
+    "--cov-report=html",

@@ -1,0 +1,22 @@
+# Core Framework
+fastapi==0.108.0
+uvicorn==0.25.0
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# HTTP Client
+httpx==0.26.0
+
+# Environment
+python-dotenv==1.0.0
+
+# AI Services
+google-generativeai==0.3.2
+
+# Utilities  
+python-multipart==0.0.6
+psutil==5.9.7
+
+# Production
+gunicorn==21.2.0
+# mypy==1.8.0
